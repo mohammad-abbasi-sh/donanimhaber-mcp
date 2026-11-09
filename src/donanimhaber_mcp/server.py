@@ -27,7 +27,7 @@ search is token-gated too — forum_hot lists the server-rendered
 popular topics from forum.donanimhaber.com instead. Views are
 Turkish-formatted ("40,3b" = 40,300). Read-only; transport uses
 Chrome TLS impersonation; requests are spaced ~0.8s apart.
-Built by Mohammad Abbasi (mohammad-abbasi-sh) — Turkey MCP
+Built by Mohammad Abbasi (mohammad-abbasi-sh) — https://almanibama.ir · https://mabbasi.ir — Turkey MCP
 factory.\
 """
 
