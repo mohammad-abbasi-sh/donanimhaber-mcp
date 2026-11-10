@@ -15,7 +15,7 @@ MCP istemci yapılandırmanıza ekleyin (stdio):
   "mcpServers": {
     "donanimhaber": {
       "command": "uvx",
-      "args": ["donanimhaber-mcp"]
+      "args": ["donanimhaber-mcp==0.1.0"]
     }
   }
 }
@@ -60,9 +60,9 @@ donanimhaber.com haber sayfalarını tamamen sunucu taraflı render ediyor — g
 ## Kurulum
 
 ```bash
-uvx donanimhaber-mcp        # doğrudan çalıştır (uv gerekir)
+uvx donanimhaber-mcp==0.1.0        # doğrudan çalıştır (uv gerekir)
 # veya
-pip install donanimhaber-mcp
+pip install donanimhaber-mcp==0.1.0
 donanimhaber-mcp    # MCP sunucusunu stdio üzerinde başlatır
 ```
 
