@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 import re
 
 from mcp.server.fastmcp import FastMCP
@@ -32,8 +33,24 @@ factory.\
 """
 
 
+_SOURCE = "donanimhaber.com"
+_DISCLAIMER = "Unofficial read-only data from donanimhaber.com; verify on the site before acting on it."
+
+
+def _envelope() -> dict:
+    return {
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "source": _SOURCE,
+        "disclaimer": _DISCLAIMER,
+    }
+
+
+def _ok(payload: dict) -> str:
+    return json.dumps({**_envelope(), **payload}, ensure_ascii=False)
+
+
 def _err(e: Exception) -> str:
-    return json.dumps({"error": str(e)}, ensure_ascii=False)
+    return _ok({"error": str(e)})
 
 
 def _validate_limit(limit: int, lo: int = 1, hi: int = 50) -> int:
@@ -52,11 +69,8 @@ def donanimhaber_latest(limit: int = 10) -> str:
         cards = _N.parse_cards(_http.fetch_home())
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(
-        {"count": min(limit, len(cards)), "total": len(cards),
-         "articles": cards[:limit]},
-        ensure_ascii=False,
-    )
+    return _ok({"count": min(limit, len(cards)), "total": len(cards),
+         "articles": cards[:limit]})
 
 
 @mcp.tool()
@@ -80,11 +94,8 @@ def donanimhaber_search_news(keyword: str, limit: int = 10) -> str:
         hits = _N.search_cards(unique, keyword.strip())
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(
-        {"keyword": keyword.strip(), "count": min(limit, len(hits)),
-         "total_matches": len(hits), "articles": hits[:limit]},
-        ensure_ascii=False,
-    )
+    return _ok({"keyword": keyword.strip(), "count": min(limit, len(hits)),
+         "total_matches": len(hits), "articles": hits[:limit]})
 
 
 @mcp.tool()
@@ -115,7 +126,7 @@ def donanimhaber_get_article(article: str) -> str:
         data = _N.parse_article(html_text, url)
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(data, ensure_ascii=False)
+    return _ok(data)
 
 
 @mcp.tool()
@@ -130,11 +141,8 @@ def donanimhaber_section(slug: str, limit: int = 10) -> str:
         cards = _N.parse_cards(_http.fetch_section(slug.strip()))
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(
-        {"section": slug.strip(), "count": min(limit, len(cards)),
-         "total": len(cards), "articles": cards[:limit]},
-        ensure_ascii=False,
-    )
+    return _ok({"section": slug.strip(), "count": min(limit, len(cards)),
+         "total": len(cards), "articles": cards[:limit]})
 
 
 @mcp.tool()
@@ -145,9 +153,7 @@ def donanimhaber_sections() -> str:
         sections = _N.parse_sections(_http.fetch_home())
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(
-        {"count": len(sections), "sections": sections}, ensure_ascii=False
-    )
+    return _ok({"count": len(sections), "sections": sections})
 
 
 @mcp.tool()
@@ -162,11 +168,18 @@ def donanimhaber_forum_hot(limit: int = 10) -> str:
         topics = _N.parse_forum_hot(_http.fetch_forum_home())
     except (ValueError, _http.DonanimhaberError) as e:
         return _err(e)
-    return json.dumps(
-        {"count": min(limit, len(topics)), "total": len(topics),
-         "topics": topics[:limit]},
-        ensure_ascii=False,
-    )
+    return _ok({"count": min(limit, len(topics)), "total": len(topics),
+         "topics": topics[:limit]})
+
+
+@mcp.tool()
+def donanimhaber_health() -> str:
+    """Check whether donanimhaber.com is reachable right now.
+
+    Returns status ok (HTTP 200), blocked (HTTP 403/429 — bot wall or
+    rate limit) or error, plus the HTTP status and the probed URL.
+    One polite request; it does not fetch any listings."""
+    return _ok(_http.health_check())
 
 
 def main() -> None:
