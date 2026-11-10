@@ -15,7 +15,7 @@ Add to your MCP client config (stdio):
   "mcpServers": {
     "donanimhaber": {
       "command": "uvx",
-      "args": ["donanimhaber-mcp==0.1.0"]
+      "args": ["donanimhaber-mcp==0.1.1"]
     }
   }
 }
@@ -60,9 +60,9 @@ Two honest limitations, verified live 2026-11-07: (1) the site's own `/ara?q=…
 ## Install
 
 ```bash
-uvx donanimhaber-mcp==0.1.0        # run directly (needs uv)
+uvx donanimhaber-mcp==0.1.1        # run directly (needs uv)
 # or
-pip install donanimhaber-mcp==0.1.0
+pip install donanimhaber-mcp==0.1.1
 donanimhaber-mcp    # starts the MCP server on stdio
 ```
 
