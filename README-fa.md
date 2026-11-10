@@ -15,7 +15,7 @@ mcp-name: io.github.mohammad-abbasi-sh/donanimhaber-mcp
   "mcpServers": {
     "donanimhaber": {
       "command": "uvx",
-      "args": ["donanimhaber-mcp"]
+      "args": ["donanimhaber-mcp==0.1.0"]
     }
   }
 }
@@ -60,9 +60,9 @@ donanimhaber.com صفحه‌های خبری را کاملاً سمت سرور ر
 ## نصب
 
 ```bash
-uvx donanimhaber-mcp        # اجرای مستقیم (نیازمند uv)
+uvx donanimhaber-mcp==0.1.0        # اجرای مستقیم (نیازمند uv)
 # یا
-pip install donanimhaber-mcp
+pip install donanimhaber-mcp==0.1.0
 donanimhaber-mcp    # سرور MCP را روی stdio راه می‌اندازد
 ```
 
